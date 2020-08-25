@@ -30,7 +30,7 @@ jobs:
           docker build -t dexai-test:latest .
 
       - name: Push to GitHub Packages
-      - uses: docker/build-push-action@v1
+        uses: docker/build-push-action@v1
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
