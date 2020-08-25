@@ -36,10 +36,22 @@ jobs:
           pip3 install -r requirements.txt
           python3 -m pytest tests
 
-  publish:
+  build-publish:
     runs-on: ubuntu-latest
-    needs: test
+
     steps:
       - uses: actions/checkout@v2
-      - name: Publish docker image to github package
-        run: echo "publish"
+      - name: Build
+        if: github.event.pull_request.merged
+        run: |
+          docker build -t dexai-test:latest
+
+      - name: Push to GitHub Packages
+        if: github.event.pull_request.merged
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: ankitm123/test-dexai/dexai
+
